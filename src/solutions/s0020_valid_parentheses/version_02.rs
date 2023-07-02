@@ -2,17 +2,19 @@ struct Solution;
 
 impl Solution {
     pub fn is_valid(s: String) -> bool {
-        let mut stack = vec![];
+        // use stack for solve [last open first close] or [inside out] related problem
+        // or match requirement of inputs in reserved order
+        let mut required_close = vec![];
 
         for c in s.chars() {
             match c {
                 // Push match close parentheses to stack
-                '(' => stack.push(')'),
-                '[' => stack.push(']'),
-                '{' => stack.push('}'),
+                '(' => required_close.push(')'),
+                '[' => required_close.push(']'),
+                '{' => required_close.push('}'),
                 // Compare close parentheses to that match required close parentheses in stack
                 _ => {
-                    match stack.pop() {
+                    match required_close.pop() {
                         None => return false,
                         Some(last) if last != c => return false,
                         _ => {},
@@ -21,7 +23,7 @@ impl Solution {
             }
         }
 
-        stack.is_empty()
+        required_close.is_empty()
     }
 }
 
