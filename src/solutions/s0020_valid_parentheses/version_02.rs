@@ -3,23 +3,24 @@ struct Solution;
 impl Solution {
     pub fn is_valid(s: String) -> bool {
         let mut stack = vec![];
-        
+
         for c in s.chars() {
             match c {
-                '(' | '[' | '{' => stack.push(c),
+                // Push match close parentheses to stack
+                '(' => stack.push(')'),
+                '[' => stack.push(']'),
+                '{' => stack.push('}'),
+                // Compare close parentheses to that match required close parentheses in stack
                 _ => {
-                    if stack.is_empty() {
-                        return false;
-                    }
-                    let top = stack.pop().unwrap();
-                    match (top, c) {
-                        ('(', ')') | ('[', ']') | ('{', '}') => continue,
-                        _ => return false
+                    match stack.pop() {
+                        None => return false,
+                        Some(last) if last != c => return false,
+                        _ => {},
                     }
                 }
             }
         }
-        
+
         stack.is_empty()
     }
 }
