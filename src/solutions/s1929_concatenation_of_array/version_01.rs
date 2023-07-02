@@ -4,8 +4,9 @@ impl Solution {
     pub fn get_concatenation(nums: Vec<i32>) -> Vec<i32> {
         let len = nums.len();
         let mut ans = vec![0; len * 2];
-        for i in 0..ans.len() {
-            ans[i] = nums[i % len];
+        for i in 0..len {
+            ans[i] = nums[i];
+            ans[i + len] = nums[i];
         }
         ans
     }
