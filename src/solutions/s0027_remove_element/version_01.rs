@@ -5,10 +5,7 @@ impl Solution {
         let mut current: i32 = 0;
         for next in 0..nums.len() {
             if nums[next] != val {
-                if nums[current as usize] == val {
-                    nums[current as usize] = nums[next];
-                    nums[next] = val;
-                }
+                nums[current as usize] = nums[next];
                 current += 1;
             }
         }
@@ -22,9 +19,9 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut nums = vec![0,1,2,2,3,0,4,2];
+        let mut nums = vec![0, 1, 2, 2, 3, 0, 4, 2];
         let val = 2;
-        let expected_nums = vec![0,1,3,0,4];
+        let expected_nums = vec![0, 1, 3, 0, 4];
         let result = Solution::remove_element(&mut nums, val);
         assert_eq!(result, expected_nums.len() as i32);
         assert_eq!(nums.into_iter().take(result as usize).collect::<Vec<i32>>(), expected_nums);
