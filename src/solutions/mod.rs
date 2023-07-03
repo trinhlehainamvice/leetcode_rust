@@ -8,3 +8,4 @@ mod s0020_valid_parentheses;
 mod s0155_min_stack;
 // Linked List
 mod s0206_reserve_linked_list;
+mod s0021_merge_two_sorted_lists;
