@@ -3,3 +3,4 @@ mod s0027_remove_element;
 mod s1929_concatenation_of_array;
 mod s0682_baseball_game;
 mod s0020_valid_parentheses;
+mod s0155_min_stack;
