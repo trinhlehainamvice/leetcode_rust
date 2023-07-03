@@ -49,17 +49,20 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut first = Box::new(ListNode::new(1));
-        let mut second = Box::new(ListNode::new(2));
-        let mut third = Box::new(ListNode::new(3));
-        let mut fourth = Box::new(ListNode::new(4));
-        let fifth = Box::new(ListNode::new(5));
-        fourth.next = Some(fifth);
-        third.next = Some(fourth);
-        second.next = Some(third);
-        first.next = Some(second);
-
-        let mut reserved_head = Solution::reverse_list(Some(first));
+        // Create a [1, 2, 3, 4, 5] linked list
+        let mut head = Some(Box::new(ListNode::new(1)));
+        let mut current = &mut head;
+        for num in 2..=5 {
+            // To reference inside element of an [&mut Option], use as_mut()
+            let Some(mut node) = current.as_mut() else {
+                break;
+            };
+            node.next = Some(Box::new(ListNode::new(num)));
+            current = &mut node.next;
+        }
+        //
+        
+        let mut reserved_head = Solution::reverse_list(head);
         let mut result = vec![];
         while let Some(node) = reserved_head {
             result.push(node.val);
