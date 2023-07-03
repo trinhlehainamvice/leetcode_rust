@@ -23,7 +23,7 @@ impl MinStack {
                 self.min_stack.push(val);
             }
             None => self.min_stack.push(val),
-            _ => (),
+            _ => {}
         }
     }
 
@@ -37,11 +37,17 @@ impl MinStack {
     }
 
     fn top(&self) -> i32 {
-        self.stack.last().unwrap().clone()
+        match self.stack.last() {
+            Some(val) => *val,
+            None => i32::MAX,
+        }
     }
 
     fn get_min(&self) -> i32 {
-        self.min_stack.last().unwrap().clone()
+        match self.min_stack.last() {
+            Some(min) => *min,
+            None => i32::MAX, 
+        }
     }
 }
 
