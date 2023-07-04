@@ -1,15 +1,15 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-struct Node {
+struct DoubleLinkedNode {
     val: i32,
-    prev: Option<Rc<RefCell<Node>>>,
-    next: Option<Rc<RefCell<Node>>>,
+    prev: Option<Rc<RefCell<DoubleLinkedNode>>>,
+    next: Option<Rc<RefCell<DoubleLinkedNode>>>,
 }
 
 struct MyLinkedList {
-    head: Option<Rc<RefCell<Node>>>,
-    tail: Option<Rc<RefCell<Node>>>,
+    head: Option<Rc<RefCell<DoubleLinkedNode>>>,
+    tail: Option<Rc<RefCell<DoubleLinkedNode>>>,
     len: i32,
 }
 
@@ -58,7 +58,7 @@ impl MyLinkedList {
     }
 
     fn add_at_head(&mut self, val: i32) {
-        let head = Some(Rc::new(RefCell::new(Node {
+        let head = Some(Rc::new(RefCell::new(DoubleLinkedNode {
             val,
             next: self.head.clone(),
             prev: None,
@@ -77,7 +77,7 @@ impl MyLinkedList {
     }
 
     fn add_at_tail(&mut self, val: i32) {
-        let tail = Some(Rc::new(RefCell::new(Node {
+        let tail = Some(Rc::new(RefCell::new(DoubleLinkedNode {
             val,
             next: None,
             prev: self.tail.clone(),
@@ -115,7 +115,7 @@ impl MyLinkedList {
 
         if let Some(current_node) = current {
             let prev_node = current_node.borrow().prev.clone();
-            let new_node = Some(Rc::new(RefCell::new(Node {
+            let new_node = Some(Rc::new(RefCell::new(DoubleLinkedNode {
                 val,
                 next: Some(current_node.clone()),
                 prev: prev_node.clone(),
