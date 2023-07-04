@@ -1,14 +1,12 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-#[derive(Debug)]
 struct Node {
     val: i32,
     prev: Option<Rc<RefCell<Node>>>,
     next: Option<Rc<RefCell<Node>>>,
 }
 
-#[derive(Debug)]
 struct MyLinkedList {
     head: Option<Rc<RefCell<Node>>>,
     tail: Option<Rc<RefCell<Node>>>,
@@ -29,7 +27,7 @@ impl MyLinkedList {
     }
 
     fn get(&self, index: i32) -> i32 {
-        if self.len == 0 {
+        if self.len == 0 || index >= self.len {
             return -1;
         }
 
@@ -45,7 +43,7 @@ impl MyLinkedList {
             }
         }
 
-        return match current.clone() {
+        return match current {
             Some(node) => {
                 node.borrow().val
             }
@@ -62,6 +60,14 @@ impl MyLinkedList {
             prev: None,
         })));
         
+        if self.len == 0 {
+            self.head = head.clone();
+            self.tail = head;
+            self.len += 1;
+            return;
+        }
+        
+        self.head.clone().unwrap().borrow_mut().prev = head.clone();
         self.head = head;
         self.len += 1;
     }
@@ -72,19 +78,26 @@ impl MyLinkedList {
             next: None,
             prev: self.tail.clone(),
         })));
+
+        if self.len == 0 {
+            self.head = tail.clone();
+            self.tail = tail;
+            self.len += 1;
+            return;
+        }
         
+        self.tail.clone().unwrap().borrow_mut().next = tail.clone();
         self.tail = tail;
         self.len += 1;
     }
 
     fn add_at_index(&mut self, index: i32, val: i32) {
         match index {
+            _ if index > self.len - 1 => {
+                return;
+            },
             _ if index == 0 => {
                 self.add_at_head(val);
-                return;
-            }
-            _ if index == self.len => {
-                self.add_at_tail(val);
                 return;
             }
             _ => ()
@@ -101,7 +114,7 @@ impl MyLinkedList {
             let prev_node = current_node.borrow().prev.clone();
             let new_node = Some(Rc::new(RefCell::new(Node {
                 val,
-                next: current_node.borrow().next.clone(),
+                next: Some(current_node.clone()),
                 prev: prev_node.clone(),
             })));
             current_node.borrow_mut().prev = new_node.clone();
@@ -117,7 +130,7 @@ impl MyLinkedList {
                 self.delete_at_head();
                 return;
             }
-            _ if index == self.len => {
+            _ if index == self.len - 1 => {
                 self.delete_at_tail();
                 return;
             }
@@ -132,8 +145,8 @@ impl MyLinkedList {
         }
 
         if let Some(current_node) = current{
-            let mut prev_node = current_node.borrow().prev.clone();
-            let mut next_node = current_node.borrow().next.clone();
+            let prev_node = current_node.borrow().prev.clone();
+            let next_node = current_node.borrow().next.clone();
             prev_node.clone().unwrap().borrow_mut().next = next_node.clone();
             next_node.unwrap().borrow_mut().prev = prev_node;
         }
@@ -146,7 +159,9 @@ impl MyLinkedList {
             return;
         }
         self.head = self.head.clone().unwrap().borrow().next.clone();
-        self.head.clone().unwrap().borrow_mut().prev = None;
+        if let Some(node) = self.head.clone() {
+            node.borrow_mut().prev = None;
+        }
         self.len -= 1;
     }
 
@@ -174,17 +189,30 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_1() {
         let mut obj = MyLinkedList::new();
         let ret_1: i32 = obj.get(2);
         assert_eq!(ret_1, -1);
         obj.add_at_head(1);
-        println!("{:?}", obj);
+        let ret_2: i32 = obj.get(0);
+        assert_eq!(ret_2, 1);
         obj.add_at_tail(2);
-        println!("{:?}", obj);
+        assert_eq!(obj.get(1), 2);
         obj.add_at_index(1, 3);
-        println!("{:?}", obj);
+        assert_eq!(obj.get(1), 3);
+        assert_eq!(obj.get(2), 2);
         obj.delete_at_index(1);
-        println!("{:?}", obj);
+        assert_eq!(obj.get(1), 2);
+        obj.delete_at_index(1);
+        obj.delete_at_index(0);
+    }
+    
+    #[test]
+    fn test_2() {
+        let mut obj = MyLinkedList::new();
+        obj.add_at_head(7);
+        obj.add_at_head(2);
+        obj.add_at_head(1);
+        obj.add_at_index(3, 0);
     }
 }
