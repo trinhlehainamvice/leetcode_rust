@@ -9,3 +9,4 @@ mod s0155_min_stack;
 // Linked List
 mod s0206_reserve_linked_list;
 mod s0021_merge_two_sorted_lists;
+mod s0707_design_linked_list;
