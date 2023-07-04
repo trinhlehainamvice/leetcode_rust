@@ -27,8 +27,12 @@ impl MyLinkedList {
     }
 
     fn get(&self, index: i32) -> i32 {
-        if self.len == 0 || index >= self.len {
+        if self.len == 0 || index > self.len {
             return -1;
+        } else if index == 0 && self.len > 0 {
+            return self.head.clone().unwrap().borrow().val;
+        } else if index == self.len - 1 {
+            return self.tail.clone().unwrap().borrow().val;
         }
 
         let mut current = self.head.clone();
@@ -59,14 +63,14 @@ impl MyLinkedList {
             next: self.head.clone(),
             prev: None,
         })));
-        
+
         if self.len == 0 {
             self.head = head.clone();
             self.tail = head;
             self.len += 1;
             return;
         }
-        
+
         self.head.clone().unwrap().borrow_mut().prev = head.clone();
         self.head = head;
         self.len += 1;
@@ -85,22 +89,21 @@ impl MyLinkedList {
             self.len += 1;
             return;
         }
-        
+
         self.tail.clone().unwrap().borrow_mut().next = tail.clone();
         self.tail = tail;
         self.len += 1;
     }
 
     fn add_at_index(&mut self, index: i32, val: i32) {
-        match index {
-            _ if index > self.len - 1 => {
-                return;
-            },
-            _ if index == 0 => {
-                self.add_at_head(val);
-                return;
-            }
-            _ => ()
+        if index > self.len {
+            return;
+        } else if index == 0 {
+            self.add_at_head(val);
+            return;
+        } else if index == self.len {
+            self.add_at_tail(val);
+            return;
         }
 
         let mut current = self.head.clone();
@@ -120,21 +123,19 @@ impl MyLinkedList {
             current_node.borrow_mut().prev = new_node.clone();
             prev_node.unwrap().borrow_mut().next = new_node;
         }
-        
+
         self.len += 1;
     }
 
     fn delete_at_index(&mut self, index: i32) {
-        match index {
-            _ if index == 0 => {
-                self.delete_at_head();
-                return;
-            }
-            _ if index == self.len - 1 => {
-                self.delete_at_tail();
-                return;
-            }
-            _ => ()
+        if self.len == 0 || index > self.len - 1 {
+            return;
+        } else if index == 0 {
+            self.delete_at_head();
+            return;
+        } else if index == self.len - 1 {
+            self.delete_at_tail();
+            return;
         }
 
         let mut current = self.head.clone();
@@ -144,13 +145,13 @@ impl MyLinkedList {
             }
         }
 
-        if let Some(current_node) = current{
+        if let Some(current_node) = current {
             let prev_node = current_node.borrow().prev.clone();
             let next_node = current_node.borrow().next.clone();
             prev_node.clone().unwrap().borrow_mut().next = next_node.clone();
             next_node.unwrap().borrow_mut().prev = prev_node;
         }
-        
+
         self.len -= 1;
     }
 
@@ -206,7 +207,7 @@ mod tests {
         obj.delete_at_index(1);
         obj.delete_at_index(0);
     }
-    
+
     #[test]
     fn test_2() {
         let mut obj = MyLinkedList::new();
@@ -214,5 +215,32 @@ mod tests {
         obj.add_at_head(2);
         obj.add_at_head(1);
         obj.add_at_index(3, 0);
+        obj.delete_at_index(2);
+        obj.add_at_head(6);
+        obj.add_at_tail(4);
+        assert_eq!(obj.get(4), 4);
+    }
+
+    #[test]
+    fn test_03() {
+        let mut obj = MyLinkedList::new();
+        obj.add_at_head(2);
+        obj.delete_at_index(1);
+        obj.add_at_head(2);
+        obj.add_at_head(7);
+        obj.add_at_head(3);
+        obj.add_at_head(2);
+        obj.add_at_head(5);
+        obj.add_at_tail(5);
+        assert_eq!(obj.get(5), 2);
+        obj.delete_at_index(6);
+        obj.delete_at_index(4);
+    }
+
+    #[test]
+    fn test_04() {
+        let mut obj = MyLinkedList::new();
+        obj.add_at_index(1, 0);
+        assert_eq!(obj.get(0), -1);
     }
 }
