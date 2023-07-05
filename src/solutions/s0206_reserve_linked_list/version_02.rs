@@ -19,24 +19,19 @@ struct Solution;
 
 impl Solution {
     pub fn reverse_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut node: Option<Box<ListNode>> = None;
-
-        // Assign current as head
-        // Move head to next
-        // Swap process:
-        // - current.next -> node
-        // - node -> current
-
-        while let Some(mut current) = head {
-            // Move head to next
-            head = current.next.take();
-            // Move next to node
-            current.next = node;
-            // Move node to current
-            node = Some(current);
+        Solution::reserve(head, None)
+    }
+    
+    fn reserve(mut head: Option<Box<ListNode>>, mut prev: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        if let Some(mut current) = head {
+            let next = current.next.take();
+            current.next = prev;
+            prev = Some(current);
+            head = next;
+            return Solution::reserve(head, prev);
         }
-
-        node
+        
+        prev
     }
 }
 
@@ -58,7 +53,7 @@ mod tests {
             current = &mut node.next;
         }
         //
-        
+
         let mut reserved_head = Solution::reverse_list(head);
         let mut result = vec![];
         while let Some(node) = reserved_head {
