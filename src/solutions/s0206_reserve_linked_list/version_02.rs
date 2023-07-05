@@ -28,9 +28,15 @@ impl Solution {
             current.next = prev;
             prev = Some(current);
             head = next;
+
+            // prev -> head
+            // head -> next of head
+            // continue this process until head (aka next of head) is None
+            // return base condition of FINAL process
             return Solution::reserve(head, prev);
         }
         
+        // Base condition
         prev
     }
 }
