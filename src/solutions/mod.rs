@@ -11,3 +11,5 @@ mod s0206_reserve_linked_list;
 mod s0021_merge_two_sorted_lists;
 mod s0707_design_linked_list;
 mod s1472_design_browser_history;
+// Queue
+mod s1700_number_of_students_unable_to_eat_lunch;

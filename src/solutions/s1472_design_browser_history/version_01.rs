@@ -1,14 +1,14 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-struct UrlNode {
+struct UrlDoubleLinkedNode {
     url: String,
-    next: Option<Rc<RefCell<UrlNode>>>,
-    prev: Option<Rc<RefCell<UrlNode>>>,
+    next: Option<Rc<RefCell<UrlDoubleLinkedNode>>>,
+    prev: Option<Rc<RefCell<UrlDoubleLinkedNode>>>,
 }
 
 struct BrowserHistory {
-    current: Option<Rc<RefCell<UrlNode>>>,
+    current: Option<Rc<RefCell<UrlDoubleLinkedNode>>>,
 }
 
 /**
@@ -18,7 +18,7 @@ struct BrowserHistory {
 impl BrowserHistory {
     fn new(homepage: String) -> Self {
         BrowserHistory {
-            current: Some(Rc::new(RefCell::new(UrlNode {
+            current: Some(Rc::new(RefCell::new(UrlDoubleLinkedNode {
                 url: homepage,
                 next: None,
                 prev: None,
@@ -27,7 +27,7 @@ impl BrowserHistory {
     }
 
     fn visit(&mut self, url: String) {
-        let url_node = Some(Rc::new(RefCell::new(UrlNode {
+        let url_node = Some(Rc::new(RefCell::new(UrlDoubleLinkedNode {
             url,
             next: None,
             prev: self.current.clone(),
