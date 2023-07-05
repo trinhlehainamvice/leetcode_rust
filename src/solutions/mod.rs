@@ -14,3 +14,6 @@ mod s1472_design_browser_history;
 // Queue
 mod s1700_number_of_students_unable_to_eat_lunch;
 mod s0225_implement_stack_using_queues;
+// Recursion
+mod s0509_fibonacci_number;
+mod s0070_climbing_stairs;
