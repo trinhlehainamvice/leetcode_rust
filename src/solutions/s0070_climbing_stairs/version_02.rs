@@ -23,15 +23,15 @@ impl Solution {
         
         let mut a = 1;
         let mut b = 2;
-        let mut c = 0;
+        let mut sum = 0;
         
         for _ in 3..=n {
-            c = a + b;
+            sum = a + b;
             a = b;  
-            b = c;
+            b = sum;
         }
-        
-        c
+
+        sum
     }
 }
 

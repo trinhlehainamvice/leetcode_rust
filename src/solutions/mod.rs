@@ -17,3 +17,5 @@ mod s0225_implement_stack_using_queues;
 // Recursion
 mod s0509_fibonacci_number;
 mod s0070_climbing_stairs;
+// Sort
+mod s0912_sort_an_array;
